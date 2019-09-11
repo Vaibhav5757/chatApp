@@ -15,13 +15,16 @@
   "author": "Vaibhav Pratihar",
   "license": "ISC",
   "dependencies": {
+    "bcryptjs": "^2.4.3",
     "body-parser": "^1.19.0",
     "dotenv": "^8.1.0",
     "express-generator": "^4.16.1",
     "express-session": "^1.16.2",
     "express-validator": "^6.2.0",
+    "jsonwebtoken": "^8.5.1",
     "mongodb": "^3.3.2",
     "mongoose": "^5.7.0",
+    "mongoose-auto-increment": "^5.0.1",
     "nodemon": "^1.19.2"
   },
   "devDependencies": {
