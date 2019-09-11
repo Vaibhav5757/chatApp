@@ -12,7 +12,14 @@ function addUser(req, res) {
         password: req.body.password
     });
 
-    return res.status(200).send(user);
+    //save user to database
+    user.save(function(err){
+        if(err){
+            console.error(err);
+        }else{
+            console.log("User was Saved");
+        }
+    });
 }
 
 module.exports = {addUser};
