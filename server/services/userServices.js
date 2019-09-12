@@ -112,7 +112,7 @@ exports.forgotPassword = (body, callback) => {
                         from: process.env.USERMAIL,
                         to: body.email,
                         subject: 'testing node-mailer',
-                        text: token
+                        text: "http://localhost:"+process.env.PORT+"/resetPassword "+token
                     }
 
                     transporter.sendMail(mailOptions, (err, data) => {
@@ -123,8 +123,8 @@ exports.forgotPassword = (body, callback) => {
                         }
                     });
                 }
-            })
+            });
 
         }
-    })
+    });
 }
