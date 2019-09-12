@@ -1,6 +1,5 @@
 const mongoose = require("mongoose");
-
-mongoose.set('useCreateIndex', true);
+const AutoIncrementFactory = require('mongoose-sequence')(mongoose);
 
 const userSchema = new mongoose.Schema({
     name: {
@@ -20,6 +19,8 @@ const userSchema = new mongoose.Schema({
     }
 
 });
+
+userSchema.plugin(AutoIncrementFactory, {inc_field: 'id'});//auto-increment id field
 
 module.exports = mongoose.model('userModel',userSchema);
 
