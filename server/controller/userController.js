@@ -21,7 +21,7 @@ exports.getAllData = (req, res) => {
 
             res.status(200).send(response);
         }
-    })
+    });
 
 
 }
@@ -76,7 +76,7 @@ exports.logIn = (req, res) => {
                 }
             });
         }
-    })
+    });
 }
 
 //reset Password
@@ -112,7 +112,7 @@ exports.resetPassword = (req, res) => {
 //send a mail if password forgotten
 exports.forgotPassword = (req, res) => {
     var response = {}
-    
+
     req.checkBody('email', 'Invalid Email Address').isEmail();
     req.getValidationResult().then((err) => {
         if (err.isEmpty()) {
@@ -131,5 +131,5 @@ exports.forgotPassword = (req, res) => {
             response.data = err;
             res.status(422).send(response);
         }
-    })
+    });
 }
