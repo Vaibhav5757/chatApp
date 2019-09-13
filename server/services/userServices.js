@@ -88,6 +88,7 @@ exports.resetPassword = async (body, callback) => {
 //forgot password
 exports.forgotPassword = (body, callback) => {
     userModel.findOne({ email: body.email }, (err, user) => {
+        if(err)callback(err);
         if (!user) {
             callback("User Not Found");
         } else { 
