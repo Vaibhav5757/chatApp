@@ -18,8 +18,11 @@ const userSchema = new mongoose.Schema({
         type: String,
         required: true,
         min: 3
+    },
+    joined :{
+        type: Date,
+        required : true
     }
-
 });
 
 userSchema.plugin(AutoIncrementFactory, {inc_field: 'id'});//auto-increment id field

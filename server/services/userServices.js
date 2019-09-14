@@ -41,7 +41,8 @@ exports.addUser = async (body, callback) => {
     var user = new userModel({
         name: body.name,
         email: body.email,
-        password: await generatePassword(body.password)
+        password: await generatePassword(body.password),
+        joined: new Date()
     });
     user.save((err,data) => {
         if(err)callback(err);
