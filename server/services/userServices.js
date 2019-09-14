@@ -34,19 +34,27 @@ exports.getAllData = (callback) => {
 }
 
 //Add a new User
-exports.addUser = async (body, callback) => {
+exports.addUser = (body, callback) => {
 
-    //Hashing to hide passwords
-    var user = new userModel({
-        name: body.name,
-        email: body.email,
-        password: await generatePassword(body.password),
-        joined: new Date()
-    });
-    user.save((err, data) => {
+    userModel.findOne({ email: body.email }, async (err, user) => { //Check if the email is taken
         if (err) callback(err);
-        else callback(null, data);
+        if (user) { //If Email already taken
+            callback("Email already taken");
+        } else {
+            var user = new userModel({
+                name: body.name,
+                email: body.email,
+                password: await generatePassword(body.password),//Hashing to hide passwords
+                joined: new Date()
+            });
+            user.save((err, data) => {
+                if (err) callback(err);
+                else callback(null, data);
+            });
+        }
     });
+
+
 }
 
 //LogIn user
@@ -60,7 +68,7 @@ exports.logIn = (body, callback) => {
 
             if (!validPass) { //Invalid Password
                 callback("Invalid Password");
-            } else {
+            } else { //Passwords match
                 //Generate Token and return the token
                 var token = tokenFactory.generateToken(user);
                 callback(null, token);
