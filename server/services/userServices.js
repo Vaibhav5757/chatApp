@@ -9,7 +9,10 @@ const mailerFactory = require("../middleware/mail");
 
 require("dotenv").config();
 
-
+/**
+ * @description : Hash the password given in plain text
+ * @param {password} password is the password in plain text
+ */
 async function generatePassword(password) {
     const salt = await bcrypt.genSalt(10);
     var hashedPassword = await bcrypt.hash(password, salt);
@@ -17,12 +20,20 @@ async function generatePassword(password) {
     if (hashedPassword) return hashedPassword;
 }
 
+/**
+ * @description : Verify the password in plain text with encrypted password
+ * @param {givenPassword} password in plain text
+ * @param {hashedPassword} encrypted password in database
+ */
 async function verifyPassword(givenPassword, hashedPassword) {
     return await bcrypt.compare(givenPassword, hashedPassword);
 }
 
 
-//get All Users and their data
+/**
+ * @description : Get data of all users in Database
+ * @param {callback} : Callback function
+ */
 exports.getAllData = (callback) => {
     userModel.find({}, (err, data) => {
         if (err) {
@@ -33,7 +44,12 @@ exports.getAllData = (callback) => {
     })
 }
 
-//Add a new User
+
+/**
+ * @description : Add a new User
+ * @param {body} : body in Request Object
+ * @param {callback} : Callback function
+ */
 exports.addUser = (body, callback) => {
 
     userModel.findOne({ email: body.email }, async (err, user) => { //Check if the email is taken
@@ -57,7 +73,11 @@ exports.addUser = (body, callback) => {
 
 }
 
-//LogIn user
+/**
+ * @description : LogIn user with username and password and return a token
+ * @param {body} : body in Request Object
+ * @param {callback} : Callback function
+ */
 exports.logIn = (body, callback) => {
     userModel.findOne({ email: body.email }, async (err, user) => {
         if (!user) {
@@ -77,7 +97,11 @@ exports.logIn = (body, callback) => {
     });
 }
 
-//reset password
+/**
+ * @description : reset password with new password
+ * @param {body} : body in Request Object
+ * @param {callback} : Callback function
+ */
 exports.resetPassword = async (body, callback) => {
     var validToken = tokenFactory.verifyToken(body.token);
 
@@ -93,7 +117,11 @@ exports.resetPassword = async (body, callback) => {
     }
 }
 
-//forgot password
+/**
+ * @description : Send a mail to user if password is forgotten
+ * @param {body} : body in Request Object
+ * @param {callback} : Callback function
+ */
 exports.forgotPassword = (body, callback) => {
     userModel.findOne({ email: body.email }, (err, user) => {
         if (err) callback(err);

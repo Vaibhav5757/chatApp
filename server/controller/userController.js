@@ -4,7 +4,12 @@
 
 const userServices = require('../services/userServices')
 
-//get All data of all users
+
+/**
+ * @description : Get data of all users
+ * @param {req} : Request Body
+ * @param {res} : Response
+ */
 exports.getAllData = (req, res) => {
 
     var response = {}
@@ -26,7 +31,11 @@ exports.getAllData = (req, res) => {
 
 }
 
-//Add a new User
+/**
+ * @description : Add a new User
+ * @param {req} : Request Body
+ * @param {res} : Response
+ */
 exports.addUser = (req, res) => {
     var response = {}
 
@@ -55,7 +64,11 @@ exports.addUser = (req, res) => {
     });
 }
 
-//Log-in with email and ID
+/**
+ * @description : Log-in with email and ID
+ * @param {req} : Request Body
+ * @param {res} : Response
+ */
 exports.logIn = (req, res) => {
     var response = {}
 
@@ -79,7 +92,11 @@ exports.logIn = (req, res) => {
     });
 }
 
-//reset Password
+/**
+ * @description : Reset Password
+ * @param {req} : Request Body
+ * @param {res} : Response
+ */
 exports.resetPassword = (req, res) => {
     var response = {}
 
@@ -109,7 +126,11 @@ exports.resetPassword = (req, res) => {
 
 }
 
-//send a mail if password forgotten
+/**
+ * @description : send a mail if password forgotten
+ * @param {req} : Request Body
+ * @param {res} : Response
+ */
 exports.forgotPassword = (req, res) => {
     var response = {}
 

@@ -3,6 +3,11 @@ const mailer = require("nodemailer");
 
 const port = process.env.PORT || 3000;
 
+/**
+ * @description : Send a mail to user
+ * @param {token} : token which will help user to reset password
+ * @param {callback} : Callback function to reset password
+ */ 
 exports.sendMail = (token,body,callback) => {
     var transporter = mailer.createTransport({
         host: 'smtp.gmail.com',
