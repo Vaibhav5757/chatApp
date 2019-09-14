@@ -14,7 +14,7 @@ exports.getAllData = (req, res) => {
             response.state = false;
             response.data = null;
 
-            res.status(422).send(response);
+            res.status(404).send(response);
         } else {
             response.state = true;
             response.data = data;
@@ -50,7 +50,7 @@ exports.addUser = (req, res) => {
             });
         } else {
             response.data = err; // Any error in adding new User
-            res.status(422).send(response);
+            res.status(500).send(response);
         }
     });
 }
@@ -72,7 +72,7 @@ exports.logIn = (req, res) => {
                     res.status(200).send(response);
                 } else {
                     response.data = err;
-                    res.status(404).send(response);
+                    res.status(500).send(response);
                 }
             });
         }
@@ -124,12 +124,12 @@ exports.forgotPassword = (req, res) => {
                     res.status(200).send(response);
                 } else {
                     response.data = err;
-                    res.status(422).send(response);
+                    res.status(404).send(response);
                 }
             })
         } else {
             response.data = err;
-            res.status(422).send(response);
+            res.status(500).send(response);
         }
     });
 }
