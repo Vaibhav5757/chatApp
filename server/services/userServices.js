@@ -1,6 +1,5 @@
 /**
 * @description : Business Logic
-* 
 */
 
 const userModel = require("../app/model/userModel");
@@ -13,13 +12,13 @@ require("dotenv").config();
 
 async function generatePassword(password) {
     const salt = await bcrypt.genSalt(10);
-    var hashedPassword = await bcrypt.hash(password,salt);
-    
-    if(hashedPassword)return hashedPassword;
+    var hashedPassword = await bcrypt.hash(password, salt);
+
+    if (hashedPassword) return hashedPassword;
 }
 
-async function verifyPassword(givenPassword,hashedPassword){ 
-    return await bcrypt.compare(givenPassword,hashedPassword);
+async function verifyPassword(givenPassword, hashedPassword) {
+    return await bcrypt.compare(givenPassword, hashedPassword);
 }
 
 
@@ -44,9 +43,9 @@ exports.addUser = async (body, callback) => {
         password: await generatePassword(body.password),
         joined: new Date()
     });
-    user.save((err,data) => {
-        if(err)callback(err);
-        else callback(null,data);
+    user.save((err, data) => {
+        if (err) callback(err);
+        else callback(null, data);
     });
 }
 
@@ -57,11 +56,11 @@ exports.logIn = (body, callback) => {
             callback(err);
         } else {
             //Compare the Password;
-            var validPass = await verifyPassword(body.password,user.password);
-            
+            var validPass = await verifyPassword(body.password, user.password);
+
             if (!validPass) { //Invalid Password
                 callback("Invalid Password");
-            } else { 
+            } else {
                 //Generate Token and return the token
                 var token = tokenFactory.generateToken(user);
                 callback(null, token);
@@ -72,16 +71,16 @@ exports.logIn = (body, callback) => {
 
 //reset password
 exports.resetPassword = async (body, callback) => {
-    var validToken = tokenFactory.verifyToken(body);
-    
-    if(!validToken){
+    var validToken = tokenFactory.verifyToken(body.token);
+
+    if (!validToken) {
         callback("Invalid Token");
-    }else{
-        userModel.findOneAndUpdate({email: body.email},
-            {$set: {password: await generatePassword(body.password)}},
-            (err,doc) => {
-                if(err)callback(err);
-                else callback(null,doc);
+    } else {
+        userModel.findOneAndUpdate({ email: body.email },
+            { $set: { password: await generatePassword(body.password) } },
+            (err, doc) => {
+                if (err) callback(err);
+                else callback(null, doc);
             });
     }
 }
@@ -89,16 +88,16 @@ exports.resetPassword = async (body, callback) => {
 //forgot password
 exports.forgotPassword = (body, callback) => {
     userModel.findOne({ email: body.email }, (err, user) => {
-        if(err)callback(err);
+        if (err) callback(err);
         if (!user) {
             callback("User Not Found");
-        } else { 
+        } else {
             // Send Mail to User with a token
             var token = tokenFactory.generateToken(user);
-            mailerFactory.sendMail(token,user,(err,data) => {
-                if(err){
+            mailerFactory.sendMail(token, user, (err, data) => {
+                if (err) {
                     callback(err);
-                }else callback(null,data);
+                } else callback(null, data);
             });
         }
     });
