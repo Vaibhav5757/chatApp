@@ -1,5 +1,6 @@
 const router = require("express").Router();
 const userController = require("../controller/userController")
+const tokenFactory = require("../middleware/token")
 
 //Users HomePage - Display all users
 router.get("/",userController.getAllData);
@@ -11,7 +12,7 @@ router.post("/addUser",userController.addUser);
 router.post("/login",userController.logIn);
 
 //reset password
-router.post("/resetPassword",userController.resetPassword);
+router.post("/resetPassword",tokenFactory.verifyToken,userController.resetPassword);
 
 //forgot Password
 router.post("/forgotPassword",userController.forgotPassword);

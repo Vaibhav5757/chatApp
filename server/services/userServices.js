@@ -13,6 +13,7 @@ require("dotenv").config();
  * @description : Hash the password given in plain text
  * @param {password} password is the password in plain text
  */
+
 async function generatePassword(password) {
     const salt = await bcrypt.genSalt(10);
     var hashedPassword = await bcrypt.hash(password, salt);
@@ -69,8 +70,6 @@ exports.addUser = (body, callback) => {
             });
         }
     });
-
-
 }
 
 /**
@@ -102,14 +101,13 @@ exports.logIn = (body, callback) => {
  * @param {body} : body in Request Object
  * @param {callback} : Callback function
  */
-exports.resetPassword = async (body, callback) => {
-    var validToken = tokenFactory.verifyToken(body.token);
-
-    if (!validToken) {
+exports.resetPassword = async (req, callback) => {
+    
+    if (!req.decode) {
         callback("Invalid Token");
     } else {
-        userModel.findOneAndUpdate({ email: body.email },
-            { $set: { password: await generatePassword(body.password) } },
+        userModel.findOneAndUpdate({ email: req.decode.email },
+            { $set: { password: await generatePassword(req.body.password) } },
             (err, doc) => {
                 if (err) callback(err);
                 else callback(null, doc);

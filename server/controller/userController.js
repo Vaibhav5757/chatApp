@@ -110,7 +110,7 @@ exports.resetPassword = (req, res) => {
 
     req.getValidationResult().then((err) => {
         if (err.isEmpty()) {
-            userServices.resetPassword(req.body, (err, data) => {
+            userServices.resetPassword(req, (err, data) => {
                 if (!err) {
                     response.state = true;
                     response.data = data;
