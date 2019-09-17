@@ -10,7 +10,9 @@ exports.generateToken = (user) => {
 
 /**
  * @description : return true or false after verifying token
- * @param {token} : Token which needs to be validated
+ * @param {req} : Request Object
+ * @param {res} : Response Object
+ * @param {next} : Next function
  */
 exports.verifyToken = (req, res,next) => {
     var token  = req.header('auth-token');
