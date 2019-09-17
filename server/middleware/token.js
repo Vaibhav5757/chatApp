@@ -17,10 +17,12 @@ exports.generateToken = (user) => {
 exports.verifyToken = (req, res,next) => {
     var token  = req.header('auth-token');
     var verified = jwt.verify(token,process.env.TOKEN_SECRET);
+    var response = {}
     
     if(!verified){
-        res.send("Invalid Token");
-        
+        response.state = false;
+        response.error = "Invalid Token"
+        res.send(response);
     }
     else{
         req.decode = verified;
