@@ -3,8 +3,16 @@
 
     app.controller("userController", userController);
 
+
+    /**
+     * @description: User Controller
+     * @param {httpServices} Service to make http requests
+     */
     function userController(httpServices) {
 
+        /**
+         * @description: get Data of All Users
+         */
         this.getUsers = () => {
 
             // Display Data of All Users
@@ -17,8 +25,12 @@
                 })
         }
 
-        //Add User
+        /**
+         * @description: Sign-Up operation
+         */
         this.addUser = () => {
+
+            //Create the User Object to send to server
             var user = {
                 name: this.name,
                 email: this.email,
@@ -26,6 +38,10 @@
                 confirmPassword: this.confirmPassword
             }
 
+            /**
+             * @description: Give a http Request for posting
+             * @param {user}: User details in an object
+             */
             httpServices.addUser(user)
                 .then((response) => {
                     if (response.data.status) this.displayMessage = "User Added";
@@ -35,4 +51,4 @@
                 })
         }
     }
-})();
+})();//IIFE - Immediately Invoked Function
