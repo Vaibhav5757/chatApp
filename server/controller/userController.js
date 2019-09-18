@@ -16,12 +16,12 @@ exports.getAllData = (req, res) => {
 
     userServices.getAllData((err, data) => {
         if (err) {
-            response.state = false;
+            response.status = false;
             response.error = err;
 
             res.status(404).send(response);
         } else {
-            response.state = true;
+            response.status = true;
             response.data = data;
 
             res.status(200).send(response);
@@ -41,26 +41,26 @@ exports.addUser = (req, res) => {
 
     req.checkBody('name', 'Invalid Name or Length of Name').isString().isLength({ min: 3 });
     req.checkBody('email', 'Invalid Email Id').isEmail();
-    req.checkBody('password', 'Invalid Password Length').isString().isLength({ min: 3 });
+    req.checkBody('password', 'Invalid Password Length').isString().isLength({ min: 3 }).equals(req.body.confirmPassword);
 
     req.getValidationResult().then((err) => {
         if (err.isEmpty()) {
             userServices.addUser(req.body, (err, data) => {
                 if (err) {
-                    response.state = false;
+                    response.status = false;
                     response.error = err; //Any error in saving
                     res.status(422).send(response);
                 }
                 else {
-                    response.state = true;
+                    response.status = true;
                     response.data = data;
 
                     res.status(200).send(response);
                 }
             });
         } else {
-            response.state = false;
-            response.error = err; // Any error in adding new User
+            response.status = false;
+            response.error = "Invalid Details Entered"; // Any error in adding new User
             res.status(500).send(response);
         }
     });
@@ -81,12 +81,12 @@ exports.logIn = (req, res) => {
         if (err.isEmpty()) {
             userServices.logIn(req.body, (err, data) => {
                 if (!err) {
-                    response.state = true;
+                    response.status = true;
                     response.data = data;
 
                     res.status(200).send(response);
                 } else {
-                    response.state = false;
+                    response.status = false;
                     response.error = err;
                     res.status(500).send(response);
                 }
@@ -115,12 +115,12 @@ exports.resetPassword = (req, res) => {
         if (err.isEmpty()) {
             userServices.resetPassword(req, (err, data) => {
                 if (!err) {
-                    response.state = true;
+                    response.status = true;
                     response.data = data;
 
                     res.status(200).send(response);
                 } else {
-                    response.state = false;
+                    response.status = false;
                     response.error = err;
                     res.status(422).send(response);
                 }
@@ -143,18 +143,18 @@ exports.forgotPassword = (req, res) => {
         if (err.isEmpty()) {
             userServices.forgotPassword(req.body, (err, data) => {
                 if (!err) {
-                    response.state = true;
+                    response.status = true;
                     response.data = data;
 
                     res.status(200).send(response);
                 } else {
-                    response.state = false;
+                    response.status = false;
                     response.error = err;
                     res.status(404).send(response);
                 }
             })
         } else {
-            response.state = false;
+            response.status = false;
             response.error = err;
             res.status(500).send(response);
         }

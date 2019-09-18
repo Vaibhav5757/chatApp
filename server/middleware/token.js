@@ -20,7 +20,7 @@ exports.verifyToken = (req, res,next) => {
     var response = {}
     
     if(!verified){
-        response.state = false;
+        response.status = false;
         response.error = "Invalid Token"
         res.send(response);
     }

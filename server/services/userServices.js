@@ -62,7 +62,8 @@ exports.addUser = (body, callback) => {
                 name: body.name,
                 email: body.email,
                 password: await generatePassword(body.password),//Hashing to hide passwords
-                joined: new Date()
+                joined: new Date(),
+                timestamp: new Date()
             });
             user.save((err, data) => {
                 if (err) callback(err);
@@ -107,8 +108,7 @@ exports.resetPassword = async (req, callback) => {
         callback("Invalid Token");
     } else {
         userModel.findOneAndUpdate({ email: req.decode.email },
-            { $set: { password: await generatePassword(req.body.password), timestamp: new Date()
-             } },
+            { $set: { password: await generatePassword(req.body.password), timestamp: new Date()}},
             (err, doc) => {
                 if (err) callback(err);
                 else callback(null, doc);
