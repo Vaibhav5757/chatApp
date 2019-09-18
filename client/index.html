@@ -1,0 +1,15 @@
+<html ng-app="userApp">
+    <head>
+        <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.7.8/angular.js"></script>
+        <script src="app.js"></script>
+        <script src="../client/controller/userController.js"></script>
+        <script src="../client/services/userService.js"></script>
+    </head>
+    <body>
+       <div ng-controller="userController as ctrl">
+           <ul ng-repeat="user in ctrl.users">
+               <li>{{user.email}}</li>
+           </ul>
+       </div>
+    </body>
+</html>

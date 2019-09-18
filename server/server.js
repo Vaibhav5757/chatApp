@@ -54,6 +54,13 @@ app.get("/", (req, res) => {
     res.send("Welcome to Home-Page");
 });
 
+//To access data on client side
+app.use(function (req, res, next) {
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+    next();
+});
+
 //Route for adding a new User
 app.use("/users", userRoute);
 
