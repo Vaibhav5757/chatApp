@@ -1,0 +1,14 @@
+<div>
+    <h1 align="center">
+        People On Chat App
+    </h1>
+
+    <div>
+        <div class="row p-divider" ng-repeat="user in ctrl.users">
+            <div class="col-4 p-divider__block">
+                <h2>{{user.name}}</h2>
+                <p>Email: {{user.email}}</p>
+            </div>
+        </div>
+    </div>
+</div>

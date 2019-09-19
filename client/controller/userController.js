@@ -8,21 +8,24 @@
      * @description: User Controller
      * @param {httpServices} Service to make http requests
      */
-    function userController(httpServices) {
+    function userController($location, httpServices) {
 
         /**
          * @description: get Data of All Users
          */
-        this.getUsers = () => {
+        httpServices.getUsers()
+            .then((response) => {
+                this.users = response;
+            })
+            .catch(() => {
+                this.users = {};//Empty Array to denote no users were fetched
+            })
 
-            // Display Data of All Users
-            httpServices.getUsers()
-                .then((response) => {
-                    this.users = response;
-                })
-                .catch(() => {
-                    this.users = {};//Empty Array to denote no users were fetched
-                })
+        /**
+         * @description: Re-direct to Sign Up Page
+         */
+        this.redirectSignUp = () => {
+            $location.path("/signup")
         }
 
         /**
@@ -41,11 +44,23 @@
             //Give a http Request for posting
             httpServices.addUser(user)
                 .then((response) => {
-                    if (response.data.status) this.displayMessage = "User Added";
+                    if (response.data.status) {
+                        this.displayMessage = "User Added";
+                        $location.path("/signin");
+                        this.failed = false;
+                    } else this.failed = true;
                 })
                 .catch((err) => {
                     this.displayMessage = err.data.error;
+                    this.failed = true;
                 })
+        }
+
+        /**
+         * @description: Re-direct to Log In Page
+         */
+        this.redirectSignIn = () => {
+            $location.path("/signin")
         }
 
         /**
@@ -62,11 +77,19 @@
             //Give a http Request for logging in
             httpServices.logIn(userCredentials)
                 .then((response) => {
-                    if (response.data.status) this.displayMessage = "User Logged In";
+                    if (response.data.status) {
+                        this.displayMessage = "Logging in";
+                        this.failed = false;
+                        $location.path("/chats");
+                    } else {
+                        this.failed = true;
+                    }
                 })
                 .catch((err) => {
+                    this.failed = true;
                     this.displayMessage = err.data.error;
                 })
+            this.failed = true;
         }
 
         /**

@@ -2,8 +2,9 @@ var app = angular.module("userApp", ["ngRoute"]);
 
 app.config(function ($routeProvider) {
     $routeProvider
-        .when("/home", {
-            templateUrl: 'views/home.html'
+        .when("/", {
+            templateUrl: 'views/home.html',
+            controller: 'userController as ctrl'
         })
         .when("/signin", {
             templateUrl: 'views/signin.html',
@@ -13,8 +14,11 @@ app.config(function ($routeProvider) {
             templateUrl: 'views/signup.html',
             controller: 'userController as ctrl'
         })
+        .when("/chats", {
+            templateUrl: 'views/chats.html',
+            controller: 'userController as ctrl'
+        })
         .otherwise({
-            templateUrl: 'views/home.html'
+            redirectTo: '/'
         })
 });
-
