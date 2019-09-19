@@ -14,7 +14,7 @@ exports.sendMail = (token,body,callback) => {
         port: 465,
         secure: true,
         auth: {
-            user: process.env.USERMAIL,
+            user: process.env.EMAIL,
             pass: process.env.PASSWORD
         },
         tls: { rejectUnauthorized: false }

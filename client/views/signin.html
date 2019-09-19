@@ -1,0 +1,39 @@
+<style>
+    .container {
+        height: 600px;
+        position: relative;
+    }
+
+    .center {
+        margin: 0;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        -ms-transform: translate(-50%, -50%);
+        transform: translate(-50%, -50%);
+    }
+
+</style>
+
+
+
+<div class="container">
+    <div class="center">
+        <!-- LogIn a user with email and password -->
+        <div class="body">
+
+            <p style="font-family: fantasy;font-size: xx-large;"  align="center">
+                Sign-In
+            </p>
+            <p><input type="text" ng-model="ctrl.email" placeholder="E-mail"></input></p>
+            <p><input type="password" ng-model="ctrl.password" placeholder="Password"></input></p>
+            <p align="center">
+                <button ng-click="ctrl.logIn()">Log In</button>
+                <button ng-click="ctrl.forgotPassword()">Forgot Password</button>
+            </p>
+            <p>{{ctrl.displayMessage}}</p>
+        </div>
+    </div>
+</div>
+
+<img src='img.jpg' style='position:fixed;top:0px;left:0px;width:100%;height:100%;z-index:-1;'>

@@ -1,0 +1,40 @@
+<style>
+    .container {
+        height: 600px;
+        position: relative;
+    }
+
+    .center {
+        margin: 0;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        -ms-transform: translate(-50%, -50%);
+        transform: translate(-50%, -50%);
+    }
+</style>
+
+
+<div class="container">
+    <div class="center">
+        <!-- Add New User -->
+        <div>
+
+            <p style="font-family: fantasy;font-size: xx-large; color:white" align="center">
+                Sign up
+            </p>
+            <p><!--Empty Space for better presentation--> </p>
+            <p><input type="text" ng-model="ctrl.name" placeholder="Name"></input></p>
+            <p><input type="text" ng-model="ctrl.email" placeholder="E-mail"></input></p>
+            <p><input type="password" ng-model="ctrl.password" placeholder="Password"></input></p>
+            <p><input type="password" ng-model="ctrl.confirmPassword" placeholder="Confirm Password"></input></p>
+            <p align="center" ng-show="ctrl.password!=ctrl.confirmPassword">
+                Passwords do not match
+            </p>
+            <p align="center"><button ng-click="ctrl.addUser()">Sign-up</button></p>
+            <p>{{ctrl.displayMessage}}</p>
+        </div>
+    </div>
+</div>
+
+<img src='image.jpg' style='position:fixed;top:0px;left:0px;width:100%;height:100%;z-index:-1;'>

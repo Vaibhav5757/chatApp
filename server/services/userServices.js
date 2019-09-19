@@ -81,6 +81,7 @@ exports.addUser = (body, callback) => {
 exports.logIn = (body, callback) => {
     userModel.findOne({ email: body.email }, async (err, user) => {
         if (!user) {
+            err = "No User with this email exists"
             callback(err);
         } else {
             //Compare the Password;
@@ -132,7 +133,7 @@ exports.forgotPassword = (body, callback) => {
             mailerFactory.sendMail(token, user, (err, data) => {
                 if (err) {
                     callback(err);
-                } else callback(null, data);
+                } else callback(null, err);
             });
         }
     });

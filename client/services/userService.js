@@ -25,6 +25,22 @@
         this.addUser = function (user) {
             return $http.post("http://localhost:3000/users/addUser", user)
         }
+
+        /**
+         * @description: Login user and return jwt token
+         * @param {user}: User body with login details
+         */
+        this.logIn = function (user) {
+            return $http.post("http://localhost:3000/users/login", user)
+        }
+
+        /**
+         * @description: Forgot Password
+         * @param {user}: Credentials of User who forgot his/her password
+         */
+        this.forgotPassword = function(user){
+            return $http.post("http://localhost:3000/users/forgotPassword", user)
+        }
     })
 
 })();//IIFE - Immediately Invoked Function

@@ -91,6 +91,10 @@ exports.logIn = (req, res) => {
                     res.status(500).send(response);
                 }
             });
+        } else {
+            response.status = false;
+            response.error = "Invalid Email or Password";
+            res.status(422).send(response);
         }
     });
 }
@@ -139,15 +143,19 @@ exports.forgotPassword = (req, res) => {
     var response = {}
 
     req.checkBody('email', 'Invalid Email Address').isEmail();
+    
     req.getValidationResult().then((err) => {
         if (err.isEmpty()) {
             userServices.forgotPassword(req.body, (err, data) => {
                 if (!err) {
-                    response.status = true;
-                    response.data = data;
+                    if (data) {
+                        response.status = true;
+                        response.data = data;
 
-                    res.status(200).send(response);
+                        res.status(200).send(response);
+                    }
                 } else {
+                    console.log(err);
                     response.status = false;
                     response.error = err;
                     res.status(404).send(response);
@@ -155,8 +163,8 @@ exports.forgotPassword = (req, res) => {
             })
         } else {
             response.status = false;
-            response.error = err;
-            res.status(500).send(response);
+            response.error = "Invalid Email Id Entered";
+            res.status(422).send(response);
         }
     });
 }
