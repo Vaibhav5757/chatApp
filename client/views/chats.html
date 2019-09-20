@@ -1,14 +1,25 @@
-<div>
-    <h1 align="center">
-        People On Chat App
-    </h1>
-
-    <div>
-        <div class="row p-divider" ng-repeat="user in ctrl.users">
-            <div class="col-4 p-divider__block">
-                <h2>{{user.name}}</h2>
-                <p>Email: {{user.email}}</p>
-            </div>
+<div class="container">
+    <div class="people">
+        <h2 align="center"> People on Chat App</h2>
+        <ul ng-repeat="user in ctrl.users">
+            <p align="center">
+                <button class="p-button--base" ng-click="ctrl.selectReceiver(user.email)">
+                    {{user.name}}
+                </button>
+            </p>
+        </ul>
+    </div>
+    <div class="message-area">
+        <h2 align="center">Messages</h2>
+        <div class="chat-area">
+            <h4 class="message">
+                Message
+            </h4>
+            <h4 class="reply" align="right">
+                Reply
+            </h4>
         </div>
+        <input type="text" placeholder="Type Message" class="type-message" id="message"></input>
+        <button class="send-button" ng-click="ctrl.sendMessage()">Send</button>
     </div>
 </div>

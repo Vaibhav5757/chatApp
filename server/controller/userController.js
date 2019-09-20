@@ -50,8 +50,7 @@ exports.addUser = (req, res) => {
                     response.status = false;
                     response.error = err; //Any error in saving
                     res.status(422).send(response);
-                }
-                else {
+                } else {
                     response.status = true;
                     response.data = data;
 
@@ -143,7 +142,7 @@ exports.forgotPassword = (req, res) => {
     var response = {}
 
     req.checkBody('email', 'Invalid Email Address').isEmail();
-    
+
     req.getValidationResult().then((err) => {
         if (err.isEmpty()) {
             userServices.forgotPassword(req.body, (err, data) => {
@@ -155,7 +154,6 @@ exports.forgotPassword = (req, res) => {
                         res.status(200).send(response);
                     }
                 } else {
-                    console.log(err);
                     response.status = false;
                     response.error = err;
                     res.status(404).send(response);
@@ -167,4 +165,40 @@ exports.forgotPassword = (req, res) => {
             res.status(422).send(response);
         }
     });
+}
+
+/**
+ * @description : Send a Message from one user to another
+ * @param {req} : Request Body
+ * @param {res} : Response
+ */
+exports.sendMessage = (req, res) => {
+
+    var response = {}
+
+    req.checkBody('sender', 'Invalid Email').isEmail();
+    req.checkBody('receiver', 'Invalid Email').isEmail();
+
+    req.getValidationResult().then((err => {
+        if (err.isEmpty()) {
+            userServices.sendMessage(req.body, (err, data) => {
+                if (!err) {
+                    if (data) {
+                        response.status = true;
+                        response.data = data;
+
+                        res.status(200).send(response);
+                    }
+                } else {
+                    response.status = false;
+                    response.error = err;
+                    res.status(404).send(response);
+                }
+            })
+        } else {
+            response.status = false;
+            response.error = "Invalid Email Id Entered";
+            res.status(422).send(response);
+        }
+    }));
 }

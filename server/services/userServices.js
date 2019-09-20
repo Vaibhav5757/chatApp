@@ -1,8 +1,9 @@
 /**
-* @description : Business Logic
-*/
+ * @description : Business Logic
+ */
 
 const userModel = require("../app/model/userModel");
+const messageModel = require("../app/model/messageModel");
 const bcrypt = require("bcryptjs");
 const tokenFactory = require("../middleware/token");
 const mailerFactory = require("../middleware/mail");
@@ -53,7 +54,7 @@ exports.getAllData = (callback) => {
  */
 exports.addUser = (body, callback) => {
 
-    userModel.findOne({ email: body.email }, async (err, user) => { //Check if the email is taken
+    userModel.findOne({ email: body.email }, async(err, user) => { //Check if the email is taken
         if (err) callback(err);
         if (user) { //If Email already taken
             callback("Email already taken");
@@ -61,7 +62,7 @@ exports.addUser = (body, callback) => {
             var user = new userModel({
                 name: body.name,
                 email: body.email,
-                password: await generatePassword(body.password),//Hashing to hide passwords
+                password: await generatePassword(body.password), //Hashing to hide passwords
                 joined: new Date(),
                 timestamp: new Date()
             });
@@ -79,7 +80,7 @@ exports.addUser = (body, callback) => {
  * @param {callback} : Callback function
  */
 exports.logIn = (body, callback) => {
-    userModel.findOne({ email: body.email }, async (err, user) => {
+    userModel.findOne({ email: body.email }, async(err, user) => {
         if (!user) {
             err = "No User with this email exists"
             callback(err);
@@ -103,13 +104,12 @@ exports.logIn = (body, callback) => {
  * @param {req} : Request Object
  * @param {callback} : Callback function
  */
-exports.resetPassword = async (req, callback) => {
-    
+exports.resetPassword = async(req, callback) => {
+
     if (!req.decode) {
         callback("Invalid Token");
     } else {
-        userModel.findOneAndUpdate({ email: req.decode.email },
-            { $set: { password: await generatePassword(req.body.password), timestamp: new Date()}},
+        userModel.findOneAndUpdate({ email: req.decode.email }, { $set: { password: await generatePassword(req.body.password), timestamp: new Date() } },
             (err, doc) => {
                 if (err) callback(err);
                 else callback(null, doc);
@@ -137,4 +137,49 @@ exports.forgotPassword = (body, callback) => {
             });
         }
     });
+}
+
+/**
+ * @description: Send Message
+ * @param{body} : Details of message - sender,reciever,message
+ * @param{callback}: Callback to Controller function
+ */
+exports.sendMessage = (body, callback) => {
+    var query = {
+        $or: [{
+            sender: body.sender,
+            receiver: body.receiver
+        }, {
+            sender: body.receiver,
+            receiver: body.sender
+        }]
+
+    }
+
+    messageModel.findOne(query)
+        .then((doc) => {
+            let oldConvo = doc.conversation;
+            oldConvo.push(body.message);
+
+            messageModel.findOneAndUpdate(query, { $set: { conversation: oldConvo } }, { new: true })
+                .then((data) => {
+                    callback(null, data);
+                })
+                .catch((err) => {
+                    callback(err);
+                })
+        })
+        .catch(() => {
+            var array = new Array();
+            array.push(body.message);
+            var message = new messageModel({
+                sender: body.sender,
+                receiver: body.receiver,
+                conversation: array
+            })
+            message.save((err, data) => {
+                if (!err) callback(null, data);
+                else callback(err);
+            });
+        })
 }

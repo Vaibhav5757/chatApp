@@ -9,6 +9,7 @@ const userRoute = require("../server/router/router")
 const bodyParser = require("body-parser")
 const mongoose = require("mongoose");
 const validator = require("express-validator")
+var socket = require("socket.io");
 require("dotenv").config();
 
 //Start the server
@@ -49,11 +50,6 @@ mongoose.connection.on('error', (err) => {
 });
 
 
-//Home Page
-app.get("/", (req, res) => {
-    res.send("Welcome to Home-Page");
-});
-
 //To access data on client side
 app.use(function (req, res, next) {
     res.header("Access-Control-Allow-Origin", "*");
@@ -66,5 +62,16 @@ app.use("/users", userRoute);
 
 //Start the server
 const port = process.env.PORT || 3000;
-app.listen(port, console.log("Listening on " + port));
+var server = app.listen(port, console.log("Listening on " + port));
+
+//Client Side Use
+app.use(express.static('../client'))
+
+//Socket Setup
+var io = socket.listen(server);
+
+//Socket Connection created successfully
+io.on('connection',function(socket){
+    console.log("Socket connected");
+})
 

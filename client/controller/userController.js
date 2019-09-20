@@ -18,7 +18,7 @@
                 this.users = response;
             })
             .catch(() => {
-                this.users = {};//Empty Array to denote no users were fetched
+                this.users = {}; //Empty Array to denote no users were fetched
             })
 
         /**
@@ -80,6 +80,7 @@
                     if (response.data.status) {
                         this.displayMessage = "Logging in";
                         this.failed = false;
+                        this.sender = userCredentials.email;
                         $location.path("/chats");
                     } else {
                         this.failed = true;
@@ -110,5 +111,36 @@
                     this.displayMessage = err.data.error;
                 })
         }
+
+        /**
+         * @description: Select Reciever
+         */
+        this.selectReceiver = (email) => {
+            this.receiver = email;
+            // console.log(this.receiver);
+        }
+
+        /**
+         * @description : Send Message
+         */
+        this.sendMessage = () => {
+            var messageObject = {
+                sender: "vaibhav@gmail.com",
+                receiver: this.receiver,
+                message: document.getElementById('message').value
+            }
+
+            //HTTP Service for sending a message
+            httpServices.sendMessage(messageObject)
+                .then((response) => {
+                    if (response.data.status) {
+                        this.conversation = response.data.data;
+                    }
+                })
+                .catch((err) => {
+                    console.log(err);
+                    this.displayMessage = err.data.error;
+                })
+        }
     }
-})();//IIFE - Immediately Invoked Function
+})(); //IIFE - Immediately Invoked Function

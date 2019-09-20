@@ -1,3 +1,60 @@
+.people {
+    position: absolute;
+    width: 33%;
+    top: 10%;
+    height: 70%;
+    overflow-y: scroll;
+    scroll-behavior: smooth;
+}
+
+.people-button {
+    width: 100%;
+}
+
+.message-area {
+    position: absolute;
+    left: 33%;
+    width: 66%;
+    top: 10%;
+    height: 70%;
+}
+
+.chat-area {
+    position: absolute;
+    height: 65%;
+    width: 100%;
+    overflow-y: scroll;
+    scroll-behavior: smooth;
+}
+
+.type-message {
+    position: absolute;
+    width: 88%;
+    top: 87%;
+    left: 1%;
+    height: 10%;
+}
+
+.send-button {
+    position: absolute;
+    width: 9%;
+    top: 87%;
+    left: 90%;
+    height: 10%;
+}
+
+.message {
+    position: relative;
+    left: 2%;
+    top: 10%;
+}
+
+.reply {
+    position: relative;
+    top: 10%;
+    /* right: -15%; */
+}
+
 .container {
     height: 650px;
     position: relative;

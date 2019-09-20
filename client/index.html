@@ -1,22 +1,26 @@
 <!DOCTYPE html>
 <html ng-app="userApp">
-    <head>
-        <link rel="stylesheet" href="https://assets.ubuntu.com/v1/vanilla-framework-version-2.4.0.min.css" />
-        <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
-        <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular-route.min.js" ></script>
-        <script src="app.js" ></script>
-        <script src="controller/userController.js" ></script>
-        <script src="services/userService.js" ></script>
-        <link rel="stylesheet" href="CSS/main.css"></link>
-    </head>
-    <body>
 
-        <main ng-view>
+<head>
+    <link rel="stylesheet" href="https://assets.ubuntu.com/v1/vanilla-framework-version-2.4.0.min.css" />
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular-route.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.2.0/socket.io.js"></script>
+    <script src="app.js"></script>
+    <script src="controller/userController.js"></script>
+    <script src="services/userService.js"></script>
+    <link rel="stylesheet" href="CSS/main.css">
+    </link>
+</head>
 
-        </main>
+<body>
 
-        <!-- Display All Data of users -->
-        <!-- <div ng-controller="userController as ctrl">
+    <main ng-view>
+
+    </main>
+
+    <!-- Display All Data of users -->
+    <!-- <div ng-controller="userController as ctrl">
             <button ng-click="ctrl.getUsers()">Show All Users</button>
             <ul ng-repeat="user in ctrl.users">
                 <li><p>Name:{{user.name}}</p>
@@ -25,5 +29,6 @@
             </ul>
         </div> -->
 
-    </body>
+</body>
+
 </html>
