@@ -206,7 +206,7 @@ exports.fetchChat = (body, callback) => {
     messageModel.findOne(query)
         .then((doc) => {
             if (doc) callback(null, doc.conversation);
-            else callback(null,"No chat history. Send a message to begin Conversation");
+            else callback(null,["No chat history. Send a message to begin Conversation"]);
         })
         .catch(() => {
             callback("Error in Finding Chat-Data")

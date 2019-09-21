@@ -73,15 +73,11 @@ var io = socket.listen(server);
 
 //Socket Connection created successfully
 io.on('connection', function (socket) {
-    console.log("Socket connected");
 
     socket.on('message-sent', function (message) {
         userController.sendMessage(message, (err, data) => {
             if (!err) {
-                io.sockets.emit('message-received',{
-                    firstPerson: data.sender,
-                    secondPerson: data.receiver
-                });
+                io.sockets.emit('message-sent',message);
             } else {
                 console.log("Error in message-sending: " + err);
             }

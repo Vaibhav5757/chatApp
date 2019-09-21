@@ -9,7 +9,7 @@
      * @description: User Controller
      * @param {httpServices} Service to make http requests
      */
-    function userController($location, httpServices) {
+    function userController($scope, $location, httpServices) {
 
         /**
          * @description: get Data of All Users
@@ -159,12 +159,21 @@
             httpServices.sendMessage(messageObject);
         }
 
-        socket.on('message-received', function (data) {
-            console.log("In Message-Received Handler Client Side ");
-            httpServices.fetchChat(data.firstPerson, data.secondPerson)
+        /**
+         * @description: Clear the message field when a message is sent
+         */
+        this.clearField = function () {
+            document.getElementById("message").value = "";
+        }
+
+        socket.on('message-sent', function (message) {
+            console.log("Message Received on Client Side");
+            
+            httpServices.fetchChat(message.sender, message.receiver)
                 .then((response) => {
                     if (response.data.status) {
                         this.chat = response.data.data;
+                        output.innerHTML += "<p>" +this.chat[this.chat.length-1]+ "<p>";
                     }
                 })
                 .catch((err) => {
