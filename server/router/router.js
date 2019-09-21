@@ -17,7 +17,7 @@ router.post("/resetPassword", tokenFactory.verifyToken, userController.resetPass
 //forgot Password
 router.post("/forgotPassword", userController.forgotPassword);
 
-//Message Exchange
-router.post("/message", userController.sendMessage);
+//Message History between two users
+router.post("/chatHistory", userController.fetchChat);
 
 module.exports = router;

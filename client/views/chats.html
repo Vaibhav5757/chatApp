@@ -13,10 +13,9 @@
         <h2 align="center">Messages</h2>
         <div class="chat-area">
             <h4 class="message">
-                Message
-            </h4>
-            <h4 class="reply" align="right">
-                Reply
+                <ul id="chat" ng-repeat="messages in ctrl.chat track by $index">
+                    {{messages}}
+                </ul>
             </h4>
         </div>
         <input type="text" placeholder="Type Message" class="type-message" id="message"></input>

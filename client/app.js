@@ -1,6 +1,6 @@
 var app = angular.module("userApp", ["ngRoute"]);
 
-app.config(function($routeProvider) {
+app.config(function ($routeProvider) {
     $routeProvider
         .when("/", {
             templateUrl: 'views/home.html',
@@ -23,4 +23,4 @@ app.config(function($routeProvider) {
         })
 });
 
-var socket = io.connect('http://localhost:3000')
+var socket = io.connect('http://localhost:3000');

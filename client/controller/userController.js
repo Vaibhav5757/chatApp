@@ -3,6 +3,7 @@
 
     app.controller("userController", userController);
 
+    var loggedInUser = null;
 
     /**
      * @description: User Controller
@@ -74,6 +75,13 @@
                 password: this.password,
             }
 
+            /**
+             * Save the email of user who logged-in to remember
+             * who will be the sender of messages
+             */
+            loggedInUser = this.email;
+
+
             //Give a http Request for logging in
             httpServices.logIn(userCredentials)
                 .then((response) => {
@@ -113,11 +121,28 @@
         }
 
         /**
-         * @description: Select Reciever
+         * @description: Select Receiver
          */
         this.selectReceiver = (email) => {
             this.receiver = email;
-            // console.log(this.receiver);
+            this.fetchChat();
+        }
+
+        /**
+         * @description: Fetch Chat data between sender and Receiver
+         * Sender will be loggedIn user whereas receiver will be selected user from button click
+         */
+        this.fetchChat = () => {
+            httpServices.fetchChat(loggedInUser, this.receiver)
+                .then((response) => {
+                    if (response.data.status) {
+                        this.chat = response.data.data;
+                    }
+                })
+                .catch((err) => {
+                    console.log(err);
+                    this.chat = [err.data.error];
+                })
         }
 
         /**
@@ -125,22 +150,28 @@
          */
         this.sendMessage = () => {
             var messageObject = {
-                sender: "vaibhav@gmail.com",
+                sender: loggedInUser,
                 receiver: this.receiver,
-                message: document.getElementById('message').value
+                message: loggedInUser + ": " + document.getElementById('message').value
             }
 
             //HTTP Service for sending a message
-            httpServices.sendMessage(messageObject)
+            httpServices.sendMessage(messageObject);
+        }
+
+        socket.on('message-received', function (data) {
+            console.log("In Message-Received Handler Client Side ");
+            httpServices.fetchChat(data.firstPerson, data.secondPerson)
                 .then((response) => {
                     if (response.data.status) {
-                        this.conversation = response.data.data;
+                        this.chat = response.data.data;
                     }
                 })
                 .catch((err) => {
                     console.log(err);
-                    this.displayMessage = err.data.error;
+                    this.chat = [err.data.error];
                 })
-        }
+        })
     }
 })(); //IIFE - Immediately Invoked Function
+

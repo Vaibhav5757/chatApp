@@ -169,36 +169,46 @@ exports.forgotPassword = (req, res) => {
 
 /**
  * @description : Send a Message from one user to another
- * @param {req} : Request Body
- * @param {res} : Response
+ * @param {message}: Message Body
  */
-exports.sendMessage = (req, res) => {
+exports.sendMessage = (message, callback) => {
 
     var response = {}
 
-    req.checkBody('sender', 'Invalid Email').isEmail();
-    req.checkBody('receiver', 'Invalid Email').isEmail();
+    userServices.sendMessage(message, (err, data) => {
+        if (!err) {
+            if (data) {
+                response.status = true;
+                response.data = data;
 
-    req.getValidationResult().then((err => {
-        if (err.isEmpty()) {
-            userServices.sendMessage(req.body, (err, data) => {
-                if (!err) {
-                    if (data) {
-                        response.status = true;
-                        response.data = data;
-
-                        res.status(200).send(response);
-                    }
-                } else {
-                    response.status = false;
-                    response.error = err;
-                    res.status(404).send(response);
-                }
-            })
+                callback(null, response);
+            }
         } else {
             response.status = false;
-            response.error = "Invalid Email Id Entered";
-            res.status(422).send(response);
+            response.error = err;
+            callback(response);
         }
-    }));
+    })
+}
+
+/**
+ * @description: Fetch the chat data between two people
+ * @param {req} : Request Body
+ * @param {res} : Response
+ */
+exports.fetchChat = (req, res) => {
+    var response = {};
+
+    userServices.fetchChat(req.body, (err, data) => {
+        if (!err) {
+            response.status = true;
+            response.data = data;
+
+            res.status(200).send(response);
+        } else {
+            response.status = false;
+            response.error = err;
+            res.status(404).send(response);
+        }
+    })
 }

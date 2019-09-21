@@ -8,7 +8,8 @@ const express = require("express");
 const userRoute = require("../server/router/router")
 const bodyParser = require("body-parser")
 const mongoose = require("mongoose");
-const validator = require("express-validator")
+const validator = require("express-validator");
+const userController = require("../server/controller/userController");
 var socket = require("socket.io");
 require("dotenv").config();
 
@@ -65,13 +66,26 @@ const port = process.env.PORT || 3000;
 var server = app.listen(port, console.log("Listening on " + port));
 
 //Client Side Use
-app.use(express.static('../client'))
+app.use(express.static('../client'))//Hosts the website - or create http-server
 
 //Socket Setup
 var io = socket.listen(server);
 
 //Socket Connection created successfully
-io.on('connection',function(socket){
+io.on('connection', function (socket) {
     console.log("Socket connected");
+
+    socket.on('message-sent', function (message) {
+        userController.sendMessage(message, (err, data) => {
+            if (!err) {
+                io.sockets.emit('message-received',{
+                    firstPerson: data.sender,
+                    secondPerson: data.receiver
+                });
+            } else {
+                console.log("Error in message-sending: " + err);
+            }
+        })
+    })
 })
 

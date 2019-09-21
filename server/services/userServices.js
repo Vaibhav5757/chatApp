@@ -54,7 +54,7 @@ exports.getAllData = (callback) => {
  */
 exports.addUser = (body, callback) => {
 
-    userModel.findOne({ email: body.email }, async(err, user) => { //Check if the email is taken
+    userModel.findOne({ email: body.email }, async (err, user) => { //Check if the email is taken
         if (err) callback(err);
         if (user) { //If Email already taken
             callback("Email already taken");
@@ -80,7 +80,7 @@ exports.addUser = (body, callback) => {
  * @param {callback} : Callback function
  */
 exports.logIn = (body, callback) => {
-    userModel.findOne({ email: body.email }, async(err, user) => {
+    userModel.findOne({ email: body.email }, async (err, user) => {
         if (!user) {
             err = "No User with this email exists"
             callback(err);
@@ -91,6 +91,7 @@ exports.logIn = (body, callback) => {
             if (!validPass) { //Invalid Password
                 callback("Invalid Password");
             } else { //Passwords match
+
                 //Generate Token and return the token
                 var token = tokenFactory.generateToken(user);
                 callback(null, token);
@@ -104,7 +105,7 @@ exports.logIn = (body, callback) => {
  * @param {req} : Request Object
  * @param {callback} : Callback function
  */
-exports.resetPassword = async(req, callback) => {
+exports.resetPassword = async (req, callback) => {
 
     if (!req.decode) {
         callback("Invalid Token");
@@ -169,7 +170,7 @@ exports.sendMessage = (body, callback) => {
                     callback(err);
                 })
         })
-        .catch(() => {
+        .catch(() => { //If there was no existing chat - Create a chat
             var array = new Array();
             array.push(body.message);
             var message = new messageModel({
@@ -181,5 +182,33 @@ exports.sendMessage = (body, callback) => {
                 if (!err) callback(null, data);
                 else callback(err);
             });
+        })
+}
+
+/**
+ * @description: Fetch chat between two users
+ * @param {body} : body in Request Object
+ * @param {callback} : Callback function
+ */
+exports.fetchChat = (body, callback) => {
+    
+    var query = {
+        $or: [{
+            sender: body.sender,
+            receiver: body.receiver
+        }, {
+            sender: body.receiver,
+            receiver: body.sender
+        }]
+
+    }
+
+    messageModel.findOne(query)
+        .then((doc) => {
+            if (doc) callback(null, doc.conversation);
+            else callback(null,"No chat history. Send a message to begin Conversation");
+        })
+        .catch(() => {
+            callback("Error in Finding Chat-Data")
         })
 }
