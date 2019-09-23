@@ -18,6 +18,17 @@ app.config(function ($routeProvider) {
             templateUrl: 'views/chats.html',
             controller: 'userController as ctrl'
         })
+        .when("/resetPassword/:token", {
+            templateUrl: "/views/resetPassword.html",
+            controller: 'userController as ctrl',
+            resolve:{
+                result: function($route){
+                    token =  $route.current.params.token;
+                    if(token != null)return true;
+                }
+            }
+
+        })
         .otherwise({
             redirectTo: '/'
         })

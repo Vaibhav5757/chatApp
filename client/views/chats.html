@@ -12,14 +12,13 @@
     <div class="message-area">
         <h2 align="center">Messages</h2>
         <div class="chat-area">
-            <h4 class="message" id="output">
+            <h4 id="message" class="message">
                 <ul ng-repeat="messages in ctrl.chat track by $index">
                     {{messages}}
                 </ul>
-                
             </h4>
         </div>
         <input type="text" placeholder="Type Message" class="type-message" id="message"></input>
-        <button class="send-button" ng-click="ctrl.sendMessage(); ctrl.fetchChat(); ctrl.clearField()">Send</button>
+        <button class="send-button" ng-click="ctrl.sendMessage(); ctrl.clearField()">Send</button>
     </div>
 </div>

@@ -24,7 +24,7 @@ exports.sendMail = (token, body, callback) => {
         from: process.env.USERMAIL,
         to: body.email,
         subject: 'testing node-mailer',
-        text: "http://localhost:" + port + "/resetPassword/" + token
+        text: "http://localhost:" + port + "/#!/resetPassword/" + token
     }
 
     transporter.sendMail(mailOptions, (err, data) => {

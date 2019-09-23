@@ -51,10 +51,11 @@ mongoose.connection.on('error', (err) => {
 });
 
 
-//To access data on client side
+//To access data on client side - CORS
 app.use(function (req, res, next) {
     res.header("Access-Control-Allow-Origin", "*");
     res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+    res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS')
     next();
 });
 
@@ -66,7 +67,8 @@ const port = process.env.PORT || 3000;
 var server = app.listen(port, console.log("Listening on " + port));
 
 //Client Side Use
-app.use(express.static('../client'))//Hosts the website - or create http-server
+app.use(express.static("../client"))//Hosts the website - or create http-server
+//Makes the static files available
 
 //Socket Setup
 var io = socket.listen(server);
@@ -77,7 +79,7 @@ io.on('connection', function (socket) {
     socket.on('message-sent', function (message) {
         userController.sendMessage(message, (err, data) => {
             if (!err) {
-                io.sockets.emit('message-sent',message);
+                io.sockets.emit('message-sent', message);
             } else {
                 console.log("Error in message-sending: " + err);
             }

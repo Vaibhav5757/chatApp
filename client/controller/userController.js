@@ -8,6 +8,8 @@
     /**
      * @description: User Controller
      * @param {httpServices} Service to make http requests
+     * @param{$location}: service which allows access to url in browser
+     * @param{$scope} : Space alloted to Controller shared by all functions inside controller
      */
     function userController($scope, $location, httpServices) {
 
@@ -112,12 +114,37 @@
             //Service request for sending a mail on forgetting password
             httpServices.forgotPassword(user)
                 .then((response) => {
+                    this.forgot = true;
                     if (response.data.status) this.displayMessage = "Check Mail Inbox";
                 })
                 .catch((err) => {
-                    console.log(err);
+                    this.failed = true;
                     this.displayMessage = err.data.error;
                 })
+        }
+
+        /**
+         * @description: Reset Password
+         */
+        this.resetPassword = () => {
+            var updateDetails = {
+                password: this.password,
+                confirmPassword: this.confirmPassword
+            }
+
+            //Make a http request to change password
+            httpServices.resetPassword(updateDetails)
+            .then((response) => {
+                if(response.data.status){
+                    this.success = true;
+                    this.displayMessage = "Password Changed"
+                }
+            })
+            .catch((err) => {
+                this.failed = true;
+                console.log(err);
+                this.displayMessage = "Failed";
+            })
         }
 
         /**
@@ -125,14 +152,20 @@
          */
         this.selectReceiver = (email) => {
             this.receiver = email;
-            this.fetchChat();
+            $scope.fetchChat();
         }
 
         /**
          * @description: Fetch Chat data between sender and Receiver
          * Sender will be loggedIn user whereas receiver will be selected user from button click
+         * 
+         * 
+         *                  ******IMPORTANT******
+         *            The use of $scope is necessary as you
+         *            want to fetch and update chat both on
+         *            sender side as well as on receiver side
          */
-        this.fetchChat = () => {
+        $scope.fetchChat = () => {
             httpServices.fetchChat(loggedInUser, this.receiver)
                 .then((response) => {
                     if (response.data.status) {
@@ -166,20 +199,9 @@
             document.getElementById("message").value = "";
         }
 
-        socket.on('message-sent', function (message) {
-            console.log("Message Received on Client Side");
-            
-            httpServices.fetchChat(message.sender, message.receiver)
-                .then((response) => {
-                    if (response.data.status) {
-                        this.chat = response.data.data;
-                        output.innerHTML += "<p>" +this.chat[this.chat.length-1]+ "<p>";
-                    }
-                })
-                .catch((err) => {
-                    console.log(err);
-                    this.chat = [err.data.error];
-                })
+        //Refresh the chat after every message sent
+        socket.on("message-sent", function () {
+            $scope.fetchChat();
         })
     }
 })(); //IIFE - Immediately Invoked Function

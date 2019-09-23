@@ -39,6 +39,8 @@ exports.getAllData = (req, res) => {
 exports.addUser = (req, res) => {
     var response = {}
 
+    console.log(req);
+
     req.checkBody('name', 'Invalid Name or Length of Name').isString().isLength({ min: 3 });
     req.checkBody('email', 'Invalid Email Id').isEmail();
     req.checkBody('password', 'Invalid Password Length').isString().isLength({ min: 3 }).equals(req.body.confirmPassword);

@@ -43,6 +43,20 @@
         }
 
         /**
+         * @description: Reset Password
+         * @param {details} : contains the token and new password
+         */
+        this.resetPassword = function (details) {
+            return $http.post('http://localhost:3000/users/resetPassword', details,
+                {
+                    headers: {
+                        'auth-token': token,
+                        "Content-type":"application/json"
+                    }
+                });
+        }
+
+        /**
          * @description: Fetch Chats between two users
          * @param {firstPerson} : First Person in conversation
          * @param {secondPerson} :  Second person in conversation
@@ -53,7 +67,7 @@
                 sender: firstPerson,
                 receiver: secondPerson
             }
-            
+
             return $http.post("http://localhost:3000/users/chatHistory", request);
         }
 

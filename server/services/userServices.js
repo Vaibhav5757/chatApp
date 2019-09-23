@@ -134,7 +134,7 @@ exports.forgotPassword = (body, callback) => {
             mailerFactory.sendMail(token, user, (err, data) => {
                 if (err) {
                     callback(err);
-                } else callback(null, err);
+                } else callback(null, "Mail Sent to User");
             });
         }
     });
