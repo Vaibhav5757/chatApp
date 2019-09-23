@@ -64,7 +64,9 @@ app.use("/users", userRoute);
 
 //Start the server
 const port = process.env.PORT || 3000;
-var server = app.listen(port, console.log("Listening on " + port));
+if (!module.parent) {
+    var server = app.listen(port, console.log("Listening on " + port));
+}
 
 //Client Side Use
 app.use(express.static("../client"))//Hosts the website - or create http-server
@@ -86,4 +88,5 @@ io.on('connection', function (socket) {
         })
     })
 })
+
 

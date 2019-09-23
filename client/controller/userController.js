@@ -18,7 +18,9 @@
          */
         httpServices.getUsers()
             .then((response) => {
-                this.users = response;
+                this.users = response.filter((users) => {
+                    return loggedInUser != users.email;
+                });
             })
             .catch(() => {
                 this.users = {}; //Empty Array to denote no users were fetched
@@ -185,7 +187,7 @@
             var messageObject = {
                 sender: loggedInUser,
                 receiver: this.receiver,
-                message: loggedInUser + ": " + document.getElementById('message').value
+                message: loggedInUser + ": " + document.getElementById('messageToBeSent').value
             }
 
             //HTTP Service for sending a message
@@ -196,7 +198,7 @@
          * @description: Clear the message field when a message is sent
          */
         this.clearField = function () {
-            document.getElementById("message").value = "";
+            document.getElementById("messageToBeSent").value = "";
         }
 
         //Refresh the chat after every message sent
