@@ -64,7 +64,7 @@ app.use("/users", userRoute);
 
 //Start the server
 const port = process.env.PORT || 3000;
-if (!module.parent) {
+if (!module.parent) { //For testing purposes - lets this block restrict any call outside module
     var server = app.listen(port, console.log("Listening on " + port));
 }
 
@@ -89,4 +89,4 @@ io.on('connection', function (socket) {
     })
 })
 
-
+module.exports = app;
