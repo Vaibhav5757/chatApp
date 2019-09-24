@@ -16,7 +16,7 @@ describe('/GET users', () => {
                 type: 'array',
                 items: {
                     type: 'object',
-                    required: ['name', 'email', 'id', 'password','timestamp']
+                    required: ['name', 'email', 'id', 'password', 'timestamp']
                 }
             }
         }
@@ -26,7 +26,6 @@ describe('/GET users', () => {
         chai.request("http://localhost:3000")
             .get("/users")
             .end((err, res) => {
-                console.log(res.body);
                 expect(res).to.have.status(200);
                 expect(res.body).to.be.jsonSchema(expectedResponseForGet);
                 done();
@@ -137,4 +136,35 @@ describe('/POST', () => {
                 expect(response.body).to.be.jsonSchema(expectedResponseForGoodRequest);// If login credentials are correct
             })
     })
+
+    it('Expected response for forgot Password', () => {
+        let user = {
+            email: 'invalidmail@gmail.com'
+        }
+        chai.request("http://localhost:3000")
+            .post("/users/forgotPassword")
+            .send(user)
+            .end((err, response) => {
+                expect(response.body.status).to.equal(false); // If user with this email does not exists
+                // expect(response.body.status).to.equal(true); // If user with this email exists
+
+                expect(response.body).to.be.jsonSchema(expectedResponseForBadRequest);// If user with this email does not exists
+                // expect(response.body).to.be.jsonSchema(expectedResponseForGoodRequest); // If user with this email exists
+            })
+    })
+
+    it('Expected response for reset Password', () => {
+        /*              TEST will fail because no token is provided         */
+        let user = {
+            password:'some password',
+            confirmPassword: 'some password'
+        }
+        chai.request("http://localhost:3000")
+            .post("/users/resetPassword")
+            .send(user)
+            .end((err, response) => {
+                expect(response).to.be.undefined; //There will be no response to a request without valid token
+            })
+    })
+
 });
