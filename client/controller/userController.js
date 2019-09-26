@@ -4,6 +4,7 @@
     app.controller("userController", userController);
 
     var loggedInUser = null;
+    var receiverUser = null;
 
     /**
      * @description: User Controller
@@ -136,17 +137,17 @@
 
             //Make a http request to change password
             httpServices.resetPassword(updateDetails)
-            .then((response) => {
-                if(response.data.status){
-                    this.success = true;
-                    this.displayMessage = "Password Changed"
-                }
-            })
-            .catch((err) => {
-                this.failed = true;
-                console.log(err);
-                this.displayMessage = "Failed";
-            })
+                .then((response) => {
+                    if (response.data.status) {
+                        this.success = true;
+                        this.displayMessage = "Password Changed"
+                    }
+                })
+                .catch((err) => {
+                    this.failed = true;
+                    console.log(err);
+                    this.displayMessage = "Failed";
+                })
         }
 
         /**
@@ -154,30 +155,13 @@
          */
         this.selectReceiver = (email) => {
             this.receiver = email;
-            $scope.fetchChat();
-        }
-
-        /**
-         * @description: Fetch Chat data between sender and Receiver
-         * Sender will be loggedIn user whereas receiver will be selected user from button click
-         * 
-         * 
-         *                  ******IMPORTANT******
-         *            The use of $scope is necessary as you
-         *            want to fetch and update chat both on
-         *            sender side as well as on receiver side
-         */
-        $scope.fetchChat = () => {
-            httpServices.fetchChat(loggedInUser, this.receiver)
-                .then((response) => {
-                    if (response.data.status) {
-                        this.chat = response.data.data;
-                    }
-                })
-                .catch((err) => {
-                    console.log(err);
-                    this.chat = [err.data.error];
-                })
+            // $scope.fetchChat();
+            var room = {
+                sender: loggedInUser,
+                receiver: this.receiver,
+                message: ""
+            }
+            socket.emit("message-sent", room);
         }
 
         /**
@@ -202,8 +186,10 @@
         }
 
         //Refresh the chat after every message sent
-        socket.on("message-sent", function () {
-            $scope.fetchChat();
+        socket.on("message-received", function (data) {
+            $scope.$apply(() => {
+                $scope.chat = data.conversation;
+            })
         })
     }
 })(); //IIFE - Immediately Invoked Function

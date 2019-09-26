@@ -77,11 +77,11 @@ var io = socket.listen(server);
 
 //Socket Connection created successfully
 io.on('connection', function (socket) {
-
     socket.on('message-sent', function (message) {
         userController.sendMessage(message, (err, data) => {
             if (!err) {
-                io.sockets.emit('message-sent', message);
+                socket.join(data.data.sender+" "+data.data.receiver);//Create a Room for two people
+                io.to(data.data.sender+" "+data.data.receiver).emit('message-received',data.data);
             } else {
                 console.log("Error in message-sending: " + err);
             }

@@ -1,6 +1,7 @@
 var app = angular.module("userApp", ["ngRoute"]);
 
 app.config(function ($routeProvider) {
+    
     $routeProvider
         .when("/", {
             templateUrl: 'views/home.html',
@@ -21,10 +22,10 @@ app.config(function ($routeProvider) {
         .when("/resetPassword/:token", {
             templateUrl: "/views/resetPassword.html",
             controller: 'userController as ctrl',
-            resolve:{
-                result: function($route){
-                    token =  $route.current.params.token;
-                    if(token != null)return true;
+            resolve: {
+                result: function ($route) {
+                    token = $route.current.params.token;
+                    if (token != null) return true;
                 }
             }
 
@@ -33,5 +34,6 @@ app.config(function ($routeProvider) {
             redirectTo: '/'
         })
 });
+
 
 var socket = io.connect('http://localhost:3000');

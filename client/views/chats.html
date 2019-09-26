@@ -1,24 +1,24 @@
 <div class="container">
-    <div class="people">
-        <h2 align="center"> People on Chat App</h2>
-        <ul ng-repeat="user in ctrl.users">
-            <p align="center">
-                <button class="p-button--base" ng-click="ctrl.selectReceiver(user.email)">
-                    {{user.name}}
-                </button>
-            </p>
-        </ul>
-    </div>
-    <div class="message-area">
-        <h2 align="center">Messages</h2>
-        <div class="chat-area">
-            <h4 id="message" class="message">
-                <ul ng-repeat="messages in ctrl.chat track by $index">
-                    {{messages}}
-                </ul>
-            </h4>
+        <div class="people">
+            <h2 align="center"> People on Chat App</h2>
+            <ul ng-repeat="user in ctrl.users">
+                <p align="center">
+                    <button class="p-button--base" ng-click="ctrl.selectReceiver(user.email)">
+                        {{user.name}}
+                    </button>
+                </p>
+            </ul>
         </div>
-        <input type="text" placeholder="Type Message" class="type-message" id="messageToBeSent"></input>
-        <button class="send-button" ng-click="ctrl.sendMessage(); ctrl.clearField()">Send</button>
+        <div class="message-area">
+            <h2 align="center">Messages</h2>
+            <div class="chat-area">
+                <h4 id="message" class="message">
+                    <ul ng-repeat="messages in chat track by $index">
+                        {{messages}}
+                    </ul>
+                </h4>
+            </div>
+            <input type="text" placeholder="Type Message" class="type-message" id="messageToBeSent"></input>
+            <button class="send-button" ng-click="ctrl.sendMessage(); ctrl.clearField()">Send</button>
+        </div>
     </div>
-</div>
