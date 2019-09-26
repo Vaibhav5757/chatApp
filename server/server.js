@@ -81,7 +81,7 @@ io.on('connection', function (socket) {
     socket.on('message-sent', function (message) {
         userController.sendMessage(message, (err, data) => {
             if (!err) {
-                io.sockets.emit('message-sent', message);
+                io.sockets.emit('message-received');
             } else {
                 console.log("Error in message-sending: " + err);
             }

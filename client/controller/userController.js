@@ -202,7 +202,7 @@
         }
 
         //Refresh the chat after every message sent
-        socket.on("message-sent", function () {
+        socket.on("message-received", function () {
             $scope.fetchChat();
         })
     }
