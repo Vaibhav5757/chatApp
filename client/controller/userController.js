@@ -4,6 +4,7 @@
     app.controller("userController", userController);
 
     var loggedInUser = null;
+    var receiver = null;
 
     /**
      * @description: User Controller
@@ -136,24 +137,24 @@
 
             //Make a http request to change password
             httpServices.resetPassword(updateDetails)
-            .then((response) => {
-                if(response.data.status){
-                    this.success = true;
-                    this.displayMessage = "Password Changed"
-                }
-            })
-            .catch((err) => {
-                this.failed = true;
-                console.log(err);
-                this.displayMessage = "Failed";
-            })
+                .then((response) => {
+                    if (response.data.status) {
+                        this.success = true;
+                        this.displayMessage = "Password Changed"
+                    }
+                })
+                .catch((err) => {
+                    this.failed = true;
+                    console.log(err);
+                    this.displayMessage = "Failed";
+                })
         }
 
         /**
          * @description: Select Receiver
          */
         this.selectReceiver = (email) => {
-            this.receiver = email;
+            receiver = email;
             $scope.fetchChat();
         }
 
@@ -168,15 +169,15 @@
          *            sender side as well as on receiver side
          */
         $scope.fetchChat = () => {
-            httpServices.fetchChat(loggedInUser, this.receiver)
+            httpServices.fetchChat(loggedInUser, receiver)
                 .then((response) => {
                     if (response.data.status) {
-                        this.chat = response.data.data;
+                        $scope.chat = response.data.data;
                     }
                 })
                 .catch((err) => {
                     console.log(err);
-                    this.chat = [err.data.error];
+                    $scope.chat = [err.data.error];
                 })
         }
 
@@ -186,7 +187,7 @@
         this.sendMessage = () => {
             var messageObject = {
                 sender: loggedInUser,
-                receiver: this.receiver,
+                receiver: receiver,
                 message: loggedInUser + ": " + document.getElementById('messageToBeSent').value
             }
 
@@ -202,8 +203,13 @@
         }
 
         //Refresh the chat after every message sent
-        socket.on("message-received", function () {
-            $scope.fetchChat();
+        socket.on("message-received", function (data) {
+            if ((data.sender === loggedInUser && data.receiver === receiver) ||
+                (data.sender === receiver && data.receiver === loggedInUser)) {
+                $scope.$apply(() => {
+                    $scope.chat = data.conversation;
+                })
+            }
         })
     }
 })(); //IIFE - Immediately Invoked Function
